@@ -3,6 +3,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.controllers.patient_controller import router as patient_router
 from app.database.connection import initialize_database
@@ -19,6 +20,18 @@ app = FastAPI(
     description="API for managing patient records.",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+# Configure CORS for the Next.js frontend.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(patient_router)
