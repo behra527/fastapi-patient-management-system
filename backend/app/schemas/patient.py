@@ -1,7 +1,14 @@
+
 from datetime import date, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    field_validator,
+)
 
 
 Gender = Literal["Male", "Female", "Other"]
@@ -25,6 +32,8 @@ class PatientCreate(BaseModel):
 
 
 class PatientUpdate(BaseModel):
+    """Full replacement schema used by PUT."""
+
     full_name: str = Field(min_length=2, max_length=100)
     date_of_birth: date
     gender: Gender
@@ -35,6 +44,30 @@ class PatientUpdate(BaseModel):
     @field_validator("full_name")
     @classmethod
     def validate_full_name(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Full name cannot be empty")
+        return value
+
+
+class PatientPatch(BaseModel):
+    """Partial update schema used by PATCH."""
+
+    full_name: str | None = Field(
+        default=None, min_length=2, max_length=100
+    )
+    date_of_birth: date | None = None
+    gender: Gender | None = None
+    phone: str | None = Field(default=None, max_length=20)
+    email: EmailStr | None = None
+    address: str | None = Field(default=None, max_length=250)
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, value: str | None) -> str | None:
+        if value is None:
+            return value
+
         value = value.strip()
         if not value:
             raise ValueError("Full name cannot be empty")

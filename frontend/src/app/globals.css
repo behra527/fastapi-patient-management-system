@@ -914,3 +914,83 @@ tbody tr:nth-child(4) .patient-avatar {
     flex-direction: column;
   }
 }
+
+/* Doctor Management form */
+.doctor-form {
+  display: grid;
+  gap: 20px;
+  padding: 24px;
+}
+
+.doctor-field {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  color: var(--text-primary, #344156);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.doctor-field > span {
+  color: #dc3545;
+}
+
+.doctor-field input,
+.doctor-field select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--border, #e0e5ee);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text-primary, #344156);
+  font: inherit;
+  font-weight: 400;
+}
+
+.doctor-field input:focus,
+.doctor-field select:focus {
+  outline: none;
+  border-color: #7890f4;
+  box-shadow: 0 0 0 3px #4568e81a;
+}
+
+.doctor-field input:disabled,
+.doctor-field select:disabled {
+  cursor: not-allowed;
+  background: #f5f6f9;
+}
+
+.doctor-form-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.doctor-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .doctor-form {
+    padding: 16px;
+  }
+
+  .doctor-form .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-form-actions {
+    justify-content: stretch;
+  }
+
+  .doctor-form-actions button {
+    flex: 1;
+  }
+}

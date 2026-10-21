@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.controllers.auth_controller import router as auth_router
 from app.controllers.patient_controller import router as patient_router
 from app.database.connection import initialize_database
 
@@ -34,7 +35,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Register API routers.
 app.include_router(patient_router)
+app.include_router(auth_router)
 
 
 @app.get("/", tags=["Health"])

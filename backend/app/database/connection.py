@@ -23,7 +23,7 @@ def get_connection() -> Iterator[sqlite3.Connection]:
 
 
 def initialize_database() -> None:
-    """Create the patients table if it does not exist."""
+    """Create application tables if they do not exist."""
     with get_connection() as connection:
         connection.execute(
             """
@@ -41,6 +41,24 @@ def initialize_database() -> None:
                     strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
                 ),
                 updated_at TEXT NOT NULL DEFAULT (
+                    strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+                )
+            )
+            """
+        )
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL COLLATE NOCASE UNIQUE
+                    CHECK (length(trim(username)) BETWEEN 3 AND 50),
+                hashed_password TEXT NOT NULL,
+                role TEXT NOT NULL
+                    CHECK (role IN ('admin', 'doctor', 'receptionist')),
+                is_active INTEGER NOT NULL DEFAULT 1
+                    CHECK (is_active IN (0, 1)),
+                created_at TEXT NOT NULL DEFAULT (
                     strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
                 )
             )

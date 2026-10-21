@@ -53,6 +53,25 @@ def update_patient(
     )
 
 
+def patch_patient(
+    patient_id: int,
+    patient_data: dict,
+) -> dict | None:
+    """Validate and apply a partial patient update."""
+    _validate_patient_id(patient_id)
+
+    if not patient_data:
+        raise ValueError("At least one field must be provided")
+
+    if "date_of_birth" in patient_data:
+        _validate_date_of_birth(patient_data)
+
+    return patient_repository.patch_patient(
+        patient_id,
+        patient_data,
+    )
+
+
 def delete_patient(patient_id: int) -> bool:
     """Delete a patient and report whether a record was deleted."""
     _validate_patient_id(patient_id)
